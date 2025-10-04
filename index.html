@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Learning HTML / CSS</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background:#171917;
+            min-height: 100vh;
+            color: white;
+        }
+        
+        .container {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 10px;
+            backdrop-filter: blur(10px);
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .scorecard {
+            background: rgb(44, 41, 41);
+            padding: 20px;
+            border-radius: 10px;
+            backdrop-filter: blur(10px);
+            margin-bottom: 40px;
+        }
+        .score-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            font-family: sans-serif;
+            width: 500px;
+            max-height: 100%;
+        }
+        .side-panel {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 10px;
+            backdrop-filter: blur(10px);
+            height: 600px; /* Same height as scorecard */
+            width: 250px; /* Fixed width - adjust as needed */
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .game-layout {
+            display: flex;
+            gap: 20px; /* Space between containers */
+            align-items: flex-start; /* Align to top */
+            max-width: 800px;
+        }
+
+        .dice-block {
+            display: inline-block;
+            position: relative;
+            margin: 20px;
+            padding: 40px;
+            background: #f8f9fa;
+            border-radius: 15px;
+            border: 2px solid #e9ecef;
+            color:#171917
+            
+        }
+        .dice-block:hover {
+            outline-style:solid;
+            transform: translateY(-2px);
+        }
+        .outline {
+            outline: 2px solid blue;
+            outline-offset: 2px; /* Optional: adds space between outline and button */
+        }
+  
+        .status {
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            text-align: center;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+        
+        .status.connected {
+            background: rgba(76, 175, 80, 0.3);
+            border: 2px solid #4CAF50;
+            color: #E8F5E8;
+        }
+        
+        .status.disconnected {
+            background: rgba(244, 67, 54, 0.3);
+            border: 2px solid #F44336;
+            color: #FFEBEE;
+        }
+        
+        .toggle-btn {
+            background: rgba(33, 96, 243, 0.8);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .toggle-btn:hover {
+            outline-style:solid;
+            transform: translateY(-2px);
+        }
+
+        .score-btn {
+            background: rgba(248, 72, 41, 0.8);
+            order: 1px solid rgba(33, 234, 2, 0.2);
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-size: small;
+
+
+        }
+        .score-btn.rolling{
+            background: rgba(69, 186, 1, 0.8);
+
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            font: oblique;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>JS Yahtzee Demo</h1>
+        <div id="statusDemo" class="status connected">
+            Roll the dice!
+        </div>
+        <button class="toggle-btn" onclick="game.rollDice()">Roll Dice</button>
+
+    </div>
+    <div id="diceContainer" class = 'container'>
+        <button id="d1" class="dice-block" onclick="game.holdButton('d1')" ></button>
+        <button id="d2" class="dice-block" onclick="game.holdButton('d2')" ></button>
+        <button id="d3" class="dice-block" onclick="game.holdButton('d3')" ></button>
+        <button id="d4" class="dice-block" onclick="game.holdButton('d4')" ></button>
+        <button id="d5" class="dice-block" onclick="game.holdButton('d5')" ></button>
+    </div>
+
+    
+    <div class ="game-layout">
+    <div class="scorecard">
+        <h1>Mark your points!</h1>
+        
+                <div id="onerow" class="score-row">
+                    <span>Ones</span>
+                    <button class ="score-btn" onclick="game.selectScore('ones', this)">0</button>
+                </div>
+                <div id="tworow" class="score-row">
+                    <span>Twos</span>
+                    <button class ="score-btn" onclick="game.selectScore('twos', this)">0</button>
+                </div>
+                <div id="threerow" class="score-row">
+                    <span>Threes</span>
+                    <button class ="score-btn" onclick="game.selectScore('threes', this)">0</button>
+                </div>
+                <div id="fourrow" class="score-row">
+                    <span>Fours</span>
+                    <button class ="score-btn" onclick="game.selectScore('fours', this)">0</button>
+                </div>
+                <div id="fiverow" class="score-row">
+                    <span>Fives</span>
+                    <button class ="score-btn" onclick="game.selectScore('fives', this)">0</button>
+                </div>
+                <div id="sixrow" class="score-row">
+                    <span>Sixes</span>
+                    <button class ="score-btn" onclick="game.selectScore('sixes', this)">0</button>
+                </div>
+                
+                <div id="threekind" class="score-row">
+                    <span>3 of a Kind</span>
+                    <button class ="score-btn" onclick="game.selectScore('threekind', this)">0</button>
+                </div>
+                <div id="fourkind" class="score-row">
+                    <span>4 of a Kind</span>
+                    <button class ="score-btn" onclick="game.selectScore('fourkind', this)">0</button>
+                </div>
+                <div id="fullhouse" class="score-row">
+                    <span>Full House</span>
+                    <button class ="score-btn" onclick="game.selectScore('fullhouse', this)">0</button>
+                </div>
+                <div id="smstraight" class="score-row">
+                    <span>Small Straight</span>
+                    <button class ="score-btn" onclick="game.selectScore('smstraight', this)">0</button>
+                </div>
+                <div id="lgstraight" class="score-row">
+                    <span>Large Straight</span>
+                    <button class ="score-btn" onclick="game.selectScore('lgstraight', this)">0</button>
+                </div>
+                <div id="yahtzee" class="score-row">
+                    <span>Yahtzee</span>
+                    <button class ="score-btn" onclick="game.selectScore('yahtzee', this)">0</button>
+                </div>
+                <div id="chancerow" class="score-row">
+                    <span>Chance</span>
+                    <button class ="score-btn" onclick="game.selectScore('chance', this)">0</button>
+                </div>
+                
+                
+            </div>
+            <div class="side-panel">
+                <h2>Game Info</h2>
+                <div class="info-section">
+                    <h3>Current Score</h3>
+                    <div id="total-score">0</div>
+             </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+    <script src="index.js"></script>
+</body>
+</html>
